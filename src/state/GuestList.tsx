@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useActions} from '../hooks/userActions'
-import { useSelector } from 'react-redux'
+import { useTypedSelector } from '../hooks/useTypedSelector'
 interface ChildProps {
     // onClick?: () => void 
     children?: React.ReactNode // for rendering child components
@@ -12,7 +12,7 @@ const GuestList: React.FC = ({  }) => {
     const [guests, setGuests] = useState<string[]>([])
     const [user, setUser] = useState<{ name: string, age: number } | undefined>();
     const { searchrespos} = useActions();
-    const {data, error, loading} =  useSelector((state: any) =>  state?.repos);
+    const { data, error, loading} =  useTypedSelector((state) =>  state.repos);
 
     const onClick = () => {
         // setAddUser('');
@@ -43,6 +43,9 @@ const GuestList: React.FC = ({  }) => {
             {guests.map(guest => {
                 return <div key={guest}>{guest}</div>
             })}
+            {error && <h3>{error}</h3>}
+            {loading && <h3>Loading ...</h3>}
+            {!error && !loading && data.map(name => <div key={name}>{name}</div>)}
         </div>
     )
 }
